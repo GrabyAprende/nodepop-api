@@ -1,13 +1,52 @@
 import { useState } from "react";
+import { Route, Navigate, Routes } from "react-router-dom";
 import AdvertsPage from "./pages/adverts/AdvertsPage.js";
 import LoginPage from "./pages/auth/LoginPage.js";
-import client from "./api/cliente.js";
+import NewAdvertForm from "./pages/newAdvertForm/NewAdvertForm.js";
 
-function App() {
-  const [isLogged, setIsLogged] = useState(false);
+const PrivateRoute = ({ children, isAuthenticated }) => (
+  isAuthenticated 
+    ? children 
+    : <Navigate to="/login" replace />
+);
 
-const handleLogin = () => setIsLogged(true);
+function App({initiallyLogged}) {
+  const [isLogged, setIsLogged] = useState(initiallyLogged);
 
-  return <div className="App">{isLogged ? <AdvertsPage  /> : <LoginPage  />}</div>;
-}
+  const handleLogin = () => setIsLogged(true);
+
+  return (
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <Navigate to="/adverts" replace />
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={
+            isLogged 
+              ? <Navigate to="/adverts" replace /> 
+              : <LoginPage onLogin={handleLogin} />} 
+          />
+        <Route 
+          path="/adverts"
+          element={
+            <PrivateRoute isAuthenticated={isLogged}>
+              <AdvertsPage />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/adverts/new"
+          element={
+            <PrivateRoute isAuthenticated={isLogged}>
+              <NewAdvertForm />
+            </PrivateRoute>
+          } 
+        />
+      </Routes>
+    )
+};
 export default App;
