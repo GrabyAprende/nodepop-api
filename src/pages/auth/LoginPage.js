@@ -1,41 +1,73 @@
-import { useState } from 'react';
-import Button from '../../components/Button';
-import { login } from './service';
+import { useState } from "react";
+import { login } from "./service";
+import storage from '../../utils/storage';
 
 function LoginPage({ onLogin }) {
-    const [credentials, setCredentials] = useState({
-    username:'', 
-    password:'',
-    });
+    const rememberMeData = storage.get('nodePopCredentials');
 
-    const handleSubmit = async event => {
+    const [email, setEmail] = useState(rememberMeData ? rememberMeData.email : '');
+    const [password, setPassword] = useState(rememberMeData ? rememberMeData.password : '');
+    const [rememberMe, setRememberMe] = useState(false);
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await login(credentials);
+        await login({
+            email,
+            password,
+            rememberMe,
+        });
 
         onLogin();
     };
-    const handleChange = event => {
-        setCredentials(currentCredentials => ({
-            ...currentCredentials, [event.target.name]: event.target.value
-        }));
-    };
-    const { username , password }= credentials;
-    const disabled = !(username && password);
-    };
-    return (
-        <div>
-            <h1>Login to Nodepop</h1>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="username" onChange={handleChange} value={username}/>
-                <input type="password" name="password" onChange={handleChange} value={password} />
-                <Button type="submit" $variant="primary" disabled={disabled}>
-                    Log in
-                </Button>
 
-                
-            </form>
-        </div>
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+    const handleRememberChange = (event) => {
+        setRememberMe(event.target.checked);
+    };
+
+    const disabled = !(email && password);
+
+    return (
+        <section className="container">
+            <article>
+                <h1>Login to Nodepop</h1>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="email"
+                        onChange={handleEmailChange}
+                        value={email}
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        onChange={handlePasswordChange}
+                        value={password}
+                    />
+                    <fieldset>
+                        <label htmlFor="remember">
+                            <input
+                                type="checkbox"
+                                role="switch"
+                                id="remember"
+                                name="remember"
+                                onChange={handleRememberChange}
+                            />
+                            Remember me
+                        </label>
+                    </fieldset>
+                    <button type="submit" disabled={disabled}>
+                        Log in
+                    </button>
+                </form>
+            </article>
+        </section>
     );
 }
 
