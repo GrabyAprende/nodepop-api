@@ -1,52 +1,59 @@
-import { useState } from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
 import AdvertsPage from "./pages/adverts/AdvertsPage.js";
 import LoginPage from "./pages/auth/LoginPage.js";
 import NewAdvertForm from "./pages/newAdvertForm/NewAdvertForm.js";
+import AdvertPage from "./pages/advertPage/AdvertPage.js";
+import { Header } from "./components/Header.js";
+import { useIsLogged } from "./pages/auth/context.js";
 
-const PrivateRoute = ({ children, isAuthenticated }) => (
-  isAuthenticated 
-    ? children 
-    : <Navigate to="/login" replace />
-);
+const PrivateRoute = ({ children }) => {
+  const isLogged = useIsLogged();
+  return isLogged ? children : <Navigate to="/login" replace />;
+};
 
-function App({initiallyLogged}) {
-  const [isLogged, setIsLogged] = useState(initiallyLogged);
-
-  const handleLogin = () => setIsLogged(true);
+function App() {
+  const isLogged = useIsLogged();
 
   return (
+    // <></> Esto es un fragmento, es como un div, pero no saldra en el inspector, no se renderiza
+    <>
+      {isLogged && <Header />}
       <Routes>
-        <Route 
-          path="/" 
+        <Route path="/" element={<Navigate to="/adverts" replace />} />
+        <Route
+          path="/login"
           element={
-            <Navigate to="/adverts" replace />
-          } 
+            isLogged ? <Navigate to="/adverts" replace /> : <LoginPage />
+          }
         />
-        <Route 
-          path="/login" 
-          element={
-            isLogged 
-              ? <Navigate to="/adverts" replace /> 
-              : <LoginPage onLogin={handleLogin} />} 
-          />
-        <Route 
+        <Route
           path="/adverts"
           element={
-            <PrivateRoute isAuthenticated={isLogged}>
+            <PrivateRoute>
               <AdvertsPage />
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
+        <Route
           path="/adverts/new"
           element={
-            <PrivateRoute isAuthenticated={isLogged}>
+            <PrivateRoute>
               <NewAdvertForm />
             </PrivateRoute>
-          } 
+          }
         />
+        <Route
+          path="/adverts/:id"
+          element={
+            <PrivateRoute>
+              <AdvertPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/404" element={<div>404 | Not found</div>} />
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
-    )
-};
+    </>
+  );
+}
 export default App;
