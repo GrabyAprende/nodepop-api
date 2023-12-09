@@ -3,7 +3,7 @@ import client from "../../api/cliente";
 
 const advertURL = '/api/v1/adverts'
 
-const getAdvetUrl = (type, tag) => {
+const getAdvertUrl = (type, tag) => {
     // Inicializamos url con advertUrl
     let url = advertURL;
 
@@ -31,7 +31,7 @@ const getAdvetUrl = (type, tag) => {
 
 //otro método para que me devuelva la promesa
 export const getLatestAdverts = (type, tag) => {
-    return client.get(getAdvetUrl(type, tag));
+    return client.get(getAdvertUrl(type, tag));
 };
 
 //luego hacer la llamada desde mi componente(fichero)

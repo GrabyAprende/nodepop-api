@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { getLatestAdverts } from "./service";
 import { getTags } from '../newAdvertForm/service';
+import { Advert } from "../../components/Advert";
 
 function AdvertsPage()  {
     const [adverts, setAdverts] = useState([]) //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
@@ -74,16 +75,10 @@ function AdvertsPage()  {
                         adverts.map((advert) => {
                             return (
                                 // article en PicoCss nos crea una "tarjeta"
-                                <article key={advert.id}>
-                                    <h2>{advert.name}</h2>
-                                    <img src={advert.photo} alt={advert.name} />
-                                    <div>
-                                        Precio: {advert.price} €
-                                    </div>
-                                    <div>{ advert.sale === true ? 'Venta' : 'Compra'  }</div>
+                                <Advert key={advert.id} advertData={advert}>
                                     {/* Ponemos la direccion dinamica, dependiendo del id de advert */}
                                     <a role="button" href={`/adverts/${advert.id}`}>Ir al anuncio</a>
-                                </article>
+                                </Advert>
                         )})
                     )
                 }
