@@ -1,0 +1,21 @@
+
+ /* Estilos para dispositivos móviles (menos de 768px) */
+ @media (max-width: 767px) {
+    .adverts-grid {
+      grid-template-columns: 1fr; /* Una sola columna en dispositivos móviles */
+    }
+  }
+  
+  /* Estilos para tablet (768px a 1023px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .adverts-grid {
+      grid-template-columns: 1fr 1fr 1fr; /* Tres columnas en tablet */
+    }
+  }
+  
+  /* Estilos para escritorio (1024px o más) */
+  @media (min-width: 1024px) {
+    .adverts-grid {
+      grid-template-columns: 1fr 1fr 1fr; /* Tres columnas en escritorio */
+    }
+  }
