@@ -4,15 +4,16 @@ import LoginPage from "./pages/auth/LoginPage.js";
 import NewAdvertForm from "./pages/newAdvertForm/NewAdvertForm.js";
 import AdvertPage from "./pages/advertPage/AdvertPage.js";
 import { Header } from "./components/Header.js";
-import { useIsLogged } from "./pages/auth/context.js";
+import { useSelector } from "react-redux";
+import { getToken } from "./store/selectors/sessionSelectors.js";
 
 const PrivateRoute = ({ children }) => {
-  const isLogged = useIsLogged();
+  const isLogged = useSelector(getToken);
   return isLogged ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
-  const isLogged = useIsLogged();
+  const isLogged = useSelector(getToken);
 
   return (
     // <></> Esto es un fragmento, es como un div, pero no saldra en el inspector, no se renderiza

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { login } from "./service";
 import storage from "../../utils/storage";
-import { useAuthHandlers } from "./context";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../store/actions/sessionActions";
+import { useLogin } from "../../hooks/useLogin";
 
 function LoginPage() {
+  const dispatch = useDispatch();
   const rememberMeData = storage.get("nodePopCredentials");
-  const { onLogin } = useAuthHandlers();
+  const login = useLogin();
 
   const [email, setEmail] = useState(
     rememberMeData ? rememberMeData.email : ""
@@ -18,13 +20,13 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    await login({
+    const token = await login({
       email,
       password,
       rememberMe,
     });
 
-    onLogin();
+    dispatch(setToken(token));
   };
 
   const handleEmailChange = (event) => {

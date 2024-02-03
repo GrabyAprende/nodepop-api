@@ -19,8 +19,10 @@ export const login = async (loginData) => {
       // si remembeMe está activo
       if (rememberMe) {
         // Ponemos en storage, con la llave nodePopCredentials, el eamil y password
-        storage.set("nodePopCredentials", { email, password });
+        storage.set("nodePopCredentials", { token: accessToken });
       }
+
+      return accessToken;
     })
     .catch((err) => console.error({ err }));
 };

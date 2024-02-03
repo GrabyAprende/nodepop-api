@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import { useAuthHandlers } from "../pages/auth/context";
+import { useLogout } from "../hooks/useLogout";
 
 export function Header() {
-  const { onLogout } = useAuthHandlers();
+  const logout = useLogout();
 
   return (
     // container-fluid en PicoCSS es para que el contenedor ocupe todo el espacio horizontal
@@ -25,7 +25,7 @@ export function Header() {
           <NavLink to="/adverts/">Lista de anuncios</NavLink>
         </li>
         <li>
-          <NavLink onClick={onLogout}>Logout</NavLink>
+          <NavLink onClick={logout}>Logout</NavLink>
         </li>
       </ul>
     </nav>
