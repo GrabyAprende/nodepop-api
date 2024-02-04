@@ -1,32 +1,20 @@
 //importamos la función getLatestAdverts para hacer la llamada al service.
 import { useEffect, useState } from "react";
 import { getLatestAdverts } from "./service";
-import { getTags } from "../newAdvertForm/service";
+//import { getTags } from "../newAdvertForm/service";
 import { Advert } from "../../components/Advert";
 import "./AdvertsStyle.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setAdverts } from "../../store/actions/adsActions";
-import { getAds } from "../../store/selectors/adsSelector";
+import { selectAds, selectTags } from "../../store/selectors/adsSelector";
 
 function AdvertsPage() {
   const dispatch = useDispatch();
 
-  const { adverts } = useSelector(getAds); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
-  //const { tags } = useSelector(getTags); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
-  const [allTags, setAllTags] = useState([]); // allTags seran todos los tags que vengan desde la API
+  const adverts = useSelector(selectAds); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
+  const tags = useSelector(selectTags); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
   const [type, setType] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
-
-  // Solo la primera vez que el componente renderice, vamos a traernos los tags de la API
-  useEffect(() => {
-    getTags()
-      .then((tags) =>
-        setAllTags(() => {
-          return tags;
-        })
-      )
-      .catch((err) => console.error(err));
-  }, []); // <- este [] es la dependencia que necesitamos para renderizarlo solo la primera vez
 
   //para que no sea un bucle infinito usamos useEffect y le pasamos dos parametros
   useEffect(() => {
@@ -62,7 +50,7 @@ function AdvertsPage() {
       <label htmlFor="select-tag">Tipo de anuncio</label>
       <select id="select-tag" name="select-tag" onChange={filterByTag}>
         <option value="">Todos</option>
-        {allTags.map((tag) => {
+        {tags.map((tag) => {
           return (
             <option key={`option-${tag}`} value={tag}>
               {tag}

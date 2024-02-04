@@ -1,2 +1,2 @@
-export const getAds = (state) => state.adverts;
-export const getTags = (state) => state.tags;
+export const selectAds = (state) => state.adverts.adverts;
+export const selectTags = (state) => state.adverts.tags;

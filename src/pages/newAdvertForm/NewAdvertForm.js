@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { getTags, createAdvert } from "./service";
+import { createAdvert } from "./service";
+import { useDispatch, useSelector } from "react-redux";
+import { selectTags } from "../../store/selectors/adsSelector";
+import { addNewAdvert } from "../../store/actions/adsActions";
 
 const NewAdvertForm = () => {
+  const dispatch = useDispatch();
   // Esta es la utilidad de react-router para navegar por nuestra aplicacion
   const navigate = useNavigate();
 
@@ -14,7 +18,7 @@ const NewAdvertForm = () => {
     price: 0,
   });
 
-  const [allTags, setAllTags] = useState([]); // allTags seran todos los tags que vengan desde la API
+  const allTags = useSelector(selectTags);
   const [isButonDisabled, setIsButtonDisabled] = useState(true); // isButonDisabled nos dirá si el botón está disponible o no
 
   // Cada vez que state cambie, vamos a checkear si el botón esta disponible o no
@@ -25,17 +29,6 @@ const NewAdvertForm = () => {
       setIsButtonDisabled(true);
     }
   }, [state]); // <- este [state] es la dependencia que hara que se renderice otra vez el componente cada vez que state cambie
-
-  // Solo la primera vez que el componente renderice, vamos a traernos los tags de la API
-  useEffect(() => {
-    getTags()
-      .then((tags) =>
-        setAllTags(() => {
-          return tags;
-        })
-      )
-      .catch((err) => console.error(err));
-  }, []); // <- este [] es la dependencia que necesitamos para renderizarlo solo la primera vez
 
   // Aqui esta la logica cuando vamos a crear el anuncio
   const handleSubmit = async (event) => {
@@ -56,7 +49,10 @@ const NewAdvertForm = () => {
 
     // Llamamos a la api para crear el anuncio con formData
     createAdvert(formData)
-      .then((newAdvert) => navigate(`/adverts/${newAdvert.id}`))
+      .then((newAdvert) => {
+        dispatch(addNewAdvert(newAdvert));
+        navigate(`/adverts/${newAdvert.id}`);
+      })
       .catch((err) => console.error({ err }));
   };
 

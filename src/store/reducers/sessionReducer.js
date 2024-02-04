@@ -4,7 +4,7 @@ const initialState = {
   token: storage.get("auth") || null,
 };
 
-function sessionReducer(state = initialState, action) {
+export function sessionReducer(state = initialState, action) {
   switch (action.type) {
     case "SET_TOKEN":
       return { ...state, token: action.payload };

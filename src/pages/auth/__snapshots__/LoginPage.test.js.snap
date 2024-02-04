@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginPage renders correctly 1`] = `
+<section
+  className="container"
+>
+  <article>
+    <h1>
+      Login to Nodepop
+    </h1>
+    <form
+      onSubmit={[Function]}
+    >
+      <input
+        name="email"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+      <input
+        name="password"
+        onChange={[Function]}
+        type="password"
+        value=""
+      />
+      <fieldset>
+        <label
+          htmlFor="remember"
+        >
+          <input
+            id="remember"
+            name="remember"
+            onChange={[Function]}
+            role="switch"
+            type="checkbox"
+          />
+          Remember me
+        </label>
+      </fieldset>
+      <button
+        disabled={true}
+        type="submit"
+      >
+        Log in
+      </button>
+    </form>
+  </article>
+</section>
+`;

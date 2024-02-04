@@ -4,9 +4,13 @@ import LoginPage from "./pages/auth/LoginPage.js";
 import NewAdvertForm from "./pages/newAdvertForm/NewAdvertForm.js";
 import AdvertPage from "./pages/advertPage/AdvertPage.js";
 import { Header } from "./components/Header.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "./store/selectors/sessionSelectors.js";
 import { setAuthorizationHeader } from "./api/cliente.js";
+import { useEffect } from "react";
+import { getTags } from "./pages/newAdvertForm/service.js";
+import { setAdverts, setTags } from "./store/actions/adsActions.js";
+import { getLatestAdverts } from "./pages/adverts/service.js";
 
 const PrivateRoute = ({ children }) => {
   const isLogged = useSelector(getToken);
@@ -14,10 +18,21 @@ const PrivateRoute = ({ children }) => {
 };
 
 function App() {
+  const dispatch = useDispatch();
   const token = useSelector(getToken);
   if (token) {
     setAuthorizationHeader(token);
   }
+
+  useEffect(() => {
+    getLatestAdverts()
+      .then((adverts) => dispatch(setAdverts(adverts)))
+      .catch((err) => console.error(err));
+
+    getTags()
+      .then((tags) => dispatch(setTags(tags)))
+      .catch((err) => console.error(err));
+  }, []);
 
   const isLogged = !!token;
 
