@@ -6,6 +6,7 @@ import AdvertPage from "./pages/advertPage/AdvertPage.js";
 import { Header } from "./components/Header.js";
 import { useSelector } from "react-redux";
 import { getToken } from "./store/selectors/sessionSelectors.js";
+import { setAuthorizationHeader } from "./api/cliente.js";
 
 const PrivateRoute = ({ children }) => {
   const isLogged = useSelector(getToken);
@@ -13,7 +14,12 @@ const PrivateRoute = ({ children }) => {
 };
 
 function App() {
-  const isLogged = useSelector(getToken);
+  const token = useSelector(getToken);
+  if (token) {
+    setAuthorizationHeader(token);
+  }
+
+  const isLogged = !!token;
 
   return (
     // <></> Esto es un fragmento, es como un div, pero no saldra en el inspector, no se renderiza

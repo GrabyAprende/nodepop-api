@@ -4,9 +4,15 @@ import { getLatestAdverts } from "./service";
 import { getTags } from "../newAdvertForm/service";
 import { Advert } from "../../components/Advert";
 import "./AdvertsStyle.css";
+import { useDispatch, useSelector } from "react-redux";
+import { setAdverts } from "../../store/actions/adsActions";
+import { getAds } from "../../store/selectors/adsSelector";
 
 function AdvertsPage() {
-  const [adverts, setAdverts] = useState([]); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
+  const dispatch = useDispatch();
+
+  const { adverts } = useSelector(getAds); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
+  //const { tags } = useSelector(getTags); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
   const [allTags, setAllTags] = useState([]); // allTags seran todos los tags que vengan desde la API
   const [type, setType] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
@@ -26,9 +32,10 @@ function AdvertsPage() {
   useEffect(() => {
     //aquí hacemos la llamada al método get(service)que devuelve una promesa o el resultado del get
     getLatestAdverts(type, selectedTag)
-      .then((adverts) => setAdverts(adverts))
+      //.then((adverts) => setAdverts(adverts))
+      .then((adverts) => dispatch(setAdverts(adverts)))
       .catch((err) => console.error(err)); //luego definimos un estado para que se guarden los anuncios
-  }, [type, selectedTag]);
+  }, [type, selectedTag, dispatch]);
 
   const filterByType = (event) => {
     const typeFromEvent = event.target.value;
