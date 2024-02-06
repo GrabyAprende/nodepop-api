@@ -16,9 +16,9 @@ export const login = async (loginData) => {
       // Ponemos en storage, con la llave auth, el token
       storage.set("auth", accessToken);
 
-      // si remembeMe está activo
+      // si rememberMe está activo
       if (rememberMe) {
-        // Ponemos en storage, con la llave nodePopCredentials, el eamil y password
+        // Ponemos en storage, con la llave nodePopCredentials, el email y password
         storage.set("nodePopCredentials", { token: accessToken });
       }
 

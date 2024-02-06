@@ -1,7 +1,7 @@
 import { useState } from "react";
 import storage from "../../utils/storage";
 import { useDispatch } from "react-redux";
-import { setToken } from "../../store/actions/sessionActions";
+import { loginThunk, setToken } from "../../store/actions/sessionActions";
 import { useLogin } from "../../hooks/useLogin";
 
 function LoginPage() {
@@ -19,6 +19,7 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    dispatch(loginThunk({ email, password, rememberMe }));
 
     const token = await login({
       email,

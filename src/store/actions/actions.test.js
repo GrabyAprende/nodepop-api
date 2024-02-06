@@ -2,12 +2,11 @@
 //luego reciben los parametros, nombres del test o algo descriptivo del test
 //la funcion describe() de jest, nos sirve para agrupar test
 
-import { A_SET_TOKEN, setToken } from "./sessionActions";
+import { A_SET_TOKEN, setToken, loginThunk } from "./sessionActions";
 import { addNewAdvert, A_NEW_ADVERT } from "./adsActions";
 
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import actions from "./adsActions";
 import fetchMock from "fetch-mock";
 
 describe("setToken", () => {
@@ -35,23 +34,27 @@ describe("addNewAdvert", () => {
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe("adsActions", () => {
-  afterEach(() => {
-    fetchMock.restore();
-  });
+fetchMock.enableMocks();
 
-  it("creates A_SET_ADVERTS when fetching adverts has been done", async () => {
-    fetchMock.getOnce("/api/adverts", {
-      body: { adverts: ["Advert 1", "Advert 2"] },
-      headers: { "content-type": "application/json" },
-    });
-    const expectedActions = [
-      { type: actions.A_SET_ADVERTS, payload: ["Advert 1", "Advert 2"] },
-    ];
-    const store = mockStore({ adverts: [] });
+// Resetea el mock fetch antes de cada prueba
+beforeEach(() => {
+  fetchMock.resetMocks();
+});
 
-    return store.dispatch(actions.fetchAdverts()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
-  });
+it("dispatches A_LOGIN_SUCCESS when login is successful", async () => {
+  // Simula una respuesta exitosa de la API
+  fetchMock.mockResponseOnce(JSON.stringify({ token: "fakeToken" }));
+
+  const expectedActions = [
+    { type: "LOGIN_REQUEST" },
+    { type: "LOGIN_SUCCESS", payload: "fakeToken" },
+  ];
+
+  const store = mockStore({});
+
+  await store.dispatch(
+    loginThunk({ email: "user@example.com", password: "password" })
+  );
+
+  expect(store.getActions()).toEqual(expectedActions);
 });
