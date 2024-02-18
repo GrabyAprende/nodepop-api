@@ -11,7 +11,7 @@ export function Header() {
       <ul>
         <li>
           <Link href="/" className="contrast" onClick="event.preventDefault()">
-            <strong>NodePop</strong>
+            <strong>NodePop React</strong>
           </Link>
         </li>
       </ul>

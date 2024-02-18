@@ -1,32 +1,18 @@
-import { useLogin } from "../../hooks/useLogin";
+import { login } from "../../pages/auth/service";
 import storage from "../../utils/storage";
 
-export const A_SET_TOKEN = "SET_TOKEN";
-export const A_REMOVE_TOKEN = "REMOVE_TOKEN";
 export const A_LOGIN_REQUEST = "LOGIN_REQUEST";
 export const A_LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const A_LOGIN_FAILURE = "LOGIN_FAILURE";
-
-export const setToken = (token) => {
-  return {
-    type: A_SET_TOKEN,
-    payload: token,
-  };
-};
-
-export const removeToken = () => {
-  return {
-    type: A_REMOVE_TOKEN,
-  };
-};
+export const A_LOGOUT_REQUEST = "LOGOUT_REQUEST";
+export const A_AUTH_LOGOUT = "AUTH_LOGOUT";
 
 export const loginRequest = () => ({
   type: A_LOGIN_REQUEST,
 });
 
-export const loginSuccess = (token) => ({
+export const loginSuccess = () => ({
   type: A_LOGIN_SUCCESS,
-  payload: token,
 });
 
 export const loginFailure = (error) => ({
@@ -34,10 +20,10 @@ export const loginFailure = (error) => ({
   payload: error,
 });
 
-export const loginThunk = (credentials) => async (dispatch) => {
+export const authLogin = (credentials) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const token = await useLogin(credentials);
+    const token = await login(credentials);
     dispatch(loginSuccess(token));
 
     storage.set("nodePopCredentials", credentials, token);
@@ -45,3 +31,7 @@ export const loginThunk = (credentials) => async (dispatch) => {
     dispatch(loginFailure(error));
   }
 };
+
+export const authLogout = () => ({
+  type: A_AUTH_LOGOUT,
+});

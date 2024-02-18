@@ -9,10 +9,12 @@ export const login = async (loginData) => {
   const { email, password, rememberMe } = loginData;
 
   return client
-    .post("/api/auth/login", { email, password })
+    .post("/auth/login", { email, password })
     .then(({ accessToken }) => {
       // Ponemos en auth headers el token
       setAuthorizationHeader(accessToken);
+      // Borramos el token anterior
+      storage.remove("auth");
       // Ponemos en storage, con la llave auth, el token
       storage.set("auth", accessToken);
 

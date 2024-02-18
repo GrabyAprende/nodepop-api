@@ -2,23 +2,23 @@
 //luego reciben los parametros, nombres del test o algo descriptivo del test
 //la funcion describe() de jest, nos sirve para agrupar test
 
-import { A_SET_TOKEN, setToken, loginThunk } from "./sessionActions";
+import { authLogin } from "./sessionActions";
 import { addNewAdvert, A_NEW_ADVERT } from "./adsActions";
 
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import fetchMock from "fetch-mock";
 
-describe("setToken", () => {
-  test('should return an action "A_SET_TOKEN"', () => {
-    const token = "1234abcd";
-    const expectedAction = {
-      type: A_SET_TOKEN,
-      payload: token,
-    };
-    expect(setToken(token)).toEqual(expectedAction);
-  });
-});
+// describe("setToken", () => {
+//   test('should return an action "A_SET_TOKEN"', () => {
+//     const token = "1234abcd";
+//     const expectedAction = {
+//       type: A_SET_TOKEN,
+//       payload: token,
+//     };
+//     expect(setToken(token)).toEqual(expectedAction);
+//   });
+// });
 
 describe("addNewAdvert", () => {
   test('should return object whit "A_NEW_ADVERT" and "payload"', () => {
@@ -53,7 +53,7 @@ it("dispatches A_LOGIN_SUCCESS when login is successful", async () => {
   const store = mockStore({});
 
   await store.dispatch(
-    loginThunk({ email: "user@example.com", password: "password" })
+    authLogin({ email: "user@example.com", password: "password" })
   );
 
   expect(store.getActions()).toEqual(expectedActions);

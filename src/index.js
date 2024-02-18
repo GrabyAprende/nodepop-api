@@ -5,7 +5,12 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store/store";
+import configureStore from "./store/store";
+import storage from "./utils/storage";
+
+const accessToken = storage.get("auth");
+
+const store = configureStore({ session: { auth: !!accessToken } });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

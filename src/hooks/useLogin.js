@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
 import client, { setAuthorizationHeader } from "../api/cliente";
-import { setToken } from "../store/actions/sessionActions";
 import storage from "../utils/storage";
 
 export function useLogin() {
@@ -11,13 +10,12 @@ export function useLogin() {
     const { email, password, rememberMe } = loginData;
 
     return client
-      .post("/api/auth/login", { email, password })
+      .post("/auth/login", { email, password })
       .then(({ accessToken }) => {
         // Ponemos en auth headers el token
         setAuthorizationHeader(accessToken);
         // Ponemos en storage, con la llave auth, el token
         storage.set("auth", accessToken);
-        dispatch(setToken(accessToken));
 
         // si remembeMe está activo
         if (rememberMe) {

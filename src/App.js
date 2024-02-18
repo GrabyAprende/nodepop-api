@@ -5,21 +5,23 @@ import NewAdvertForm from "./pages/newAdvertForm/NewAdvertForm.js";
 import AdvertPage from "./pages/advertPage/AdvertPage.js";
 import { Header } from "./components/Header.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "./store/selectors/sessionSelectors.js";
+import { getIsLogged } from "./store/selectors/sessionSelectors.js";
 import { setAuthorizationHeader } from "./api/cliente.js";
 import { useEffect } from "react";
 import { getTags } from "./pages/newAdvertForm/service.js";
 import { setAdverts, setTags } from "./store/actions/adsActions.js";
 import { getLatestAdverts } from "./pages/adverts/service.js";
+import storage from "./utils/storage.js";
 
 const PrivateRoute = ({ children }) => {
-  const isLogged = useSelector(getToken);
+  const isLogged = useSelector(getIsLogged);
   return isLogged ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
   const dispatch = useDispatch();
-  const token = useSelector(getToken);
+
+  const token = storage.get("auth");
   if (token) {
     setAuthorizationHeader(token);
   }
@@ -37,7 +39,6 @@ function App() {
   const isLogged = !!token;
 
   return (
-    // <></> Esto es un fragmento, es como un div, pero no saldra en el inspector, no se renderiza
     <>
       {isLogged && <Header />}
       <Routes>

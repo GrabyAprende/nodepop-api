@@ -1,15 +1,22 @@
-import storage from "../../utils/storage";
+import {
+  A_AUTH_LOGOUT,
+  A_LOGIN_FAILURE,
+  A_LOGIN_REQUEST,
+} from "../actions/sessionActions";
 
 const initialState = {
-  token: storage.get("auth") || null,
+  auth: false,
+  error: null,
 };
 
 export function sessionReducer(state = initialState, action) {
   switch (action.type) {
-    case "SET_TOKEN":
-      return { ...state, token: action.payload };
-    case "REMOVE_TOKEN":
-      return { ...state, token: null };
+    case A_LOGIN_REQUEST:
+      return { ...state, auth: true, error: null };
+    case A_LOGIN_FAILURE:
+      return { ...state, auth: false, error: action.payload };
+    case A_AUTH_LOGOUT:
+      return { ...state, auth: false, error: null };
     default:
       return state;
   }

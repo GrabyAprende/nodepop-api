@@ -1,12 +1,27 @@
-import { createStore, applyMiddleware, compose } from "redux";
+import { legacy_createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import rootReducer from "./reducers";
-import { thunk } from "redux-thunk";
+import { withExtraArgument } from "redux-thunk";
+import * as advertsService from "../pages/adverts/service";
+import * as authService from "../pages/auth/service";
+import * as advertService from "../pages/advertPage/service";
+import * as newAdvertService from "../pages/newAdvertForm/service";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export default function configureStore(preloadedState) {
+  const middlewares = [
+    withExtraArgument({
+      ...advertsService,
+      ...authService,
+      ...advertService,
+      ...newAdvertService,
+    }),
+  ];
 
-const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk))
-);
+  const store = legacy_createStore(
+    rootReducer,
+    preloadedState,
+    composeWithDevTools(applyMiddleware(...middlewares))
+  );
 
-export default store;
+  return store;
+}

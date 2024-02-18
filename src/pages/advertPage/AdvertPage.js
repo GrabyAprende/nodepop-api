@@ -1,12 +1,3 @@
-//Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
-//anuncio o un placeholder en su lugar si no existe foto.
-//o Si el anuncio no existe deberia redirigirnos al NotFoundPage.
-//o Botón para poder borrar el anuncio. Antes de borrar mostar una
-//confirmación al usuario (algo más elaborado que un window.confirm,
-//jugando con el estado de React). Tras el borrado debería redireccionar
-//al listado de anuncios.
-///api/v1/adverts/:id o GET: Devuelve un único anuncio por Id. o DELETE: Borra un anuncio por Id.
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { deleteAdvert, getAdvert } from "./service";
