@@ -7,23 +7,28 @@ import "./AdvertsStyle.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setAdverts } from "../../store/actions/adsActions";
 import { selectAds, selectTags } from "../../store/selectors/adsSelector";
+import {
+  getIsLogged,
+  getIsLoading,
+} from "../../store/selectors/sessionSelectors";
 
 function AdvertsPage() {
   const dispatch = useDispatch();
 
   const adverts = useSelector(selectAds); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
   const tags = useSelector(selectTags); //aqui definimos el estado donde se almacena los anuncios que nos llegue de la peticion
+  const isLogged = useSelector(getIsLogged);
+  const isLoading = useSelector(getIsLoading);
   const [type, setType] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
 
-  //para que no sea un bucle infinito usamos useEffect y le pasamos dos parametros
   useEffect(() => {
-    //aquí hacemos la llamada al método get(service)que devuelve una promesa o el resultado del get
-    getLatestAdverts(type, selectedTag)
-      //.then((adverts) => setAdverts(adverts))
-      .then((adverts) => dispatch(setAdverts(adverts)))
-      .catch((err) => console.error(err)); //luego definimos un estado para que se guarden los anuncios
-  }, [type, selectedTag, dispatch]);
+    if (isLogged) {
+      getLatestAdverts(type, selectedTag)
+        .then((adverts) => dispatch(setAdverts(adverts)))
+        .catch((err) => console.error(err));
+    }
+  }, [type, selectedTag, dispatch, isLogged]);
 
   const filterByType = (event) => {
     const typeFromEvent = event.target.value;
@@ -35,7 +40,9 @@ function AdvertsPage() {
     setSelectedTag(tagFromEvent);
   };
 
-  return (
+  return isLoading ? (
+    <h2>Loading...</h2>
+  ) : (
     // La clase container en PicoCSS hace que el contenido tenga margenes a la izquierda y derecha
     <section className="container">
       <h1>Anuncios</h1>

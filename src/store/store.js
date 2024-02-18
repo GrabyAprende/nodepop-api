@@ -10,10 +10,12 @@ import * as newAdvertService from "../pages/newAdvertForm/service";
 export default function configureStore(preloadedState) {
   const middlewares = [
     withExtraArgument({
-      ...advertsService,
-      ...authService,
-      ...advertService,
-      ...newAdvertService,
+      service: {
+        ...advertsService,
+        ...authService,
+        ...advertService,
+        ...newAdvertService,
+      },
     }),
   ];
 
